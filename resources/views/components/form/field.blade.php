@@ -1,0 +1,17 @@
+@props(['label', 'name', 'type' => 'text'])
+<div class="space-y-2">
+    <label for="{{ $name }}" class="label">{{ $label }}</label>
+    <input
+        type="{{ $type }}"
+        id="{{ $name }}"
+        name="{{ $name }}"
+        value="{{ old($name) }}"
+        class="input"
+        autocomplete="{{ $name }}"
+        autofocus
+        {{ $attributes }}
+    >
+    @error($name)
+    <p class="error">{{ $message }}</p>
+    @enderror
+</div>
