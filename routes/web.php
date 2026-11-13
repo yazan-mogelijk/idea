@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Http\Controllers\IdeaController;
 use App\Http\Controllers\RegisterUserController;
 use App\Http\Controllers\SessionController;
 use Illuminate\Contracts\View\Factory;
@@ -21,4 +22,11 @@ Route::middleware('guest')->group(function (): void {
 
 Route::middleware('auth')->group(function (): void {
     Route::delete('/logout', [SessionController::class, 'destroy'])->name('logout');
+
+    Route::get('/ideas', [IdeaController::class, 'index'])->name('ideas');
+    Route::get('/ideas/{idea}', [IdeaController::class, 'show'])->name('idea.show');
+    Route::post('/ideas', [IdeaController::class, 'store'])->name('idea.store');
+    Route::patch('/ideas/{idea}', [IdeaController::class, 'update'])->name('idea.update');
+    Route::delete('/ideas/{idea}', [IdeaController::class, 'destroy'])->name('idea.destroy');
 });
+

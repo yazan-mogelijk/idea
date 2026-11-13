@@ -5,6 +5,7 @@
                 <img src="{{ asset('images/logo.svg') }}" alt="logo" width="100"/>
             </a>
         </div>
+        <a href="/ideas" class="underline">Ideas</a>
         <div class="flex gap-x-5 items-center">
             @guest
                 <a href="/register" class="">Register</a>

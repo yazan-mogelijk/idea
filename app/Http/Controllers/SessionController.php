@@ -42,6 +42,6 @@ class SessionController
     {
         Auth::logout();
 
-        return redirect('/');
+        return redirect('/')->with('success', 'You are logged out.');
     }
 }
