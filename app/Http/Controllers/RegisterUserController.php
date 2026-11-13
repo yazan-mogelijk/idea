@@ -23,7 +23,7 @@ class RegisterUserController
     {
         $attributes = $request->validate([
             'name' => ['required', 'string', 'min:5', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users','email')],
+            'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users', 'email')],
             'password' => ['required', Password::defaults()],
         ]);
 

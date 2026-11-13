@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreIdeaRequest;
 use App\Http\Requests\UpdateIdeaRequest;
+use App\IdeaStatus;
 use App\Models\Idea;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class IdeaController extends Controller
@@ -12,12 +14,24 @@ class IdeaController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $ideas = Auth::user()->ideas()->get();
+        $user = Auth::user();
+
+        $status = $request->status;
+
+        if (! in_array($status, IdeaStatus::values())) {
+            $status = null;
+        }
+
+        $ideas = $user
+            ->ideas()
+            ->when($status, fn ($query, $status) => $query->where('status', $status))
+            ->get();
 
         return view('idea.index', [
-            'ideas' => $ideas
+            'ideas' => $ideas,
+            'statusCounts' => Idea::statusCount($user),
         ]);
     }
 
@@ -26,7 +40,7 @@ class IdeaController extends Controller
      */
     public function create()
     {
-        if(!Auth::user()) {
+        if (! Auth::user()) {
             return redirect()->route('login')->with('error', 'You must be logged in to create an idea.');
         }
 
@@ -38,7 +52,7 @@ class IdeaController extends Controller
      */
     public function store(StoreIdeaRequest $request)
     {
-        if(!Auth::user()) {
+        if (! Auth::user()) {
             return redirect()->route('login')->with('error', 'You must be logged in to create an idea.');
         }
 
@@ -59,11 +73,11 @@ class IdeaController extends Controller
      */
     public function show(Idea $idea)
     {
-        if(!Auth::user()) {
+        if (! Auth::user()) {
             return redirect()->route('login')->with('error', 'You must be logged in to show an idea.');
         }
 
-        return view('idea.show', compact('idea'));
+        return view('idea.show', ['idea' => $idea]);
     }
 
     /**
@@ -72,7 +86,7 @@ class IdeaController extends Controller
     public function edit(Idea $idea)
     {
 
-        return view('idea.edit', compact('idea'));
+        return view('idea.edit', ['idea' => $idea]);
     }
 
     /**
@@ -80,7 +94,7 @@ class IdeaController extends Controller
      */
     public function update(UpdateIdeaRequest $request, Idea $idea)
     {
-        if(!Auth::user()) {
+        if (! Auth::user()) {
             return redirect()->route('login')->with('error', 'You must be logged in to update the idea.');
         }
 
@@ -103,6 +117,7 @@ class IdeaController extends Controller
     {
 
         $idea->delete();
+
         return redirect()->route('ideas')->with('success', 'You have deleted the idea.');
     }
 }

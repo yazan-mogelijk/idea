@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use Illuminate\Contracts\View\View;
-use Illuminate\Foundation\Support\Providers\RouteServiceProvider;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
@@ -16,7 +15,7 @@ class SessionController
 {
     public function create(): View
     {
-       return view('auth.login');
+        return view('auth.login');
     }
 
     public function store(Request $request): RedirectResponse|Redirector
@@ -26,7 +25,7 @@ class SessionController
             'password' => ['required', Password::defaults()],
         ]);
 
-        if (!Auth::attempt($attributes)) {
+        if (! Auth::attempt($attributes)) {
 
             return back()
                 ->withErrors(['password' => 'The provided credentials do not match our records.'])

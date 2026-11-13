@@ -12,9 +12,9 @@ it('returns a successful response', function () {
 
     $this->assertAuthenticated();
 
-//    $this->assertDatabaseHas('users', [
-//        'name' => 'John Doe',
-//    ]);
+    //    $this->assertDatabaseHas('users', [
+    //        'name' => 'John Doe',
+    //    ]);
 
     expect(Auth::user())->toMatchArray([
         'name' => 'John Doe',

@@ -29,4 +29,3 @@ Route::middleware('auth')->group(function (): void {
     Route::patch('/ideas/{idea}', [IdeaController::class, 'update'])->name('idea.update');
     Route::delete('/ideas/{idea}', [IdeaController::class, 'destroy'])->name('idea.destroy');
 });
-
