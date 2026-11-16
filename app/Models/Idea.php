@@ -5,6 +5,7 @@ namespace App\Models;
 use App\IdeaStatus;
 use Database\Factories\IdeaFactory;
 use Illuminate\Database\Eloquent\Casts\AsArrayObject;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -43,6 +44,11 @@ class Idea extends Model
     public function steps(): HasMany
     {
         return $this->hasMany(Step::class);
+    }
+
+    public function formattedDescription(): Attribute
+    {
+        return Attribute::get(fn ($value, $attributes) => str($attributes['description'])->markdown());
     }
 
     protected function casts(): array

@@ -42,9 +42,9 @@
                 <div class="text-muted-foreground text-sm">{{ $idea->created_at->diffForHumans() }}</div>
             </div>
             @if($idea->description)
-                <x-card class="mt-6">
-                    <div class="text-foreground max-w-none cursor-pointer">
-                        {{ $idea->description }}
+                <x-card is="div" class="mt-6">
+                    <div class="text-foreground max-w-none cursor-pointer prose">
+                        {!! $idea->formattedDescription !!}
                     </div>
                 </x-card>
             @endif
