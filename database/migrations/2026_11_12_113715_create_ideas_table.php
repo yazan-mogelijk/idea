@@ -15,10 +15,10 @@ return new class extends Migration
         Schema::create('ideas', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(User::class)->constrained()->cascadeOnDelete();
-            $table->string('title');
+            $table->string('title', 255);
             $table->text('description')->nullable();
-            $table->string('status')->default('pending');
-            $table->string('image_path')->nullable();
+            $table->string('status', 20)->default('pending');
+            $table->string('image_path', 255)->nullable();
             $table->json('links')->default('[]');
             $table->timestamps();
         });

@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreIdeaRequest;
-use App\Http\Requests\UpdateIdeaRequest;
+use App\Actions\CreateIdea;
+use App\Actions\UpdateIdea;
+use App\Http\Requests\IdeaRequest;
 use App\IdeaStatus;
 use App\Models\Idea;
 use Illuminate\Http\Request;
@@ -26,6 +27,7 @@ class IdeaController extends Controller
 
         $ideas = $user
             ->ideas()
+            ->latest()
             ->when($status, fn ($query, $status) => $query->where('status', $status))
             ->get();
 
@@ -50,22 +52,15 @@ class IdeaController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreIdeaRequest $request)
+    public function store(IdeaRequest $request, CreateIdea $action)
     {
         if (! Auth::user()) {
             return redirect()->route('login')->with('error', 'You must be logged in to create an idea.');
         }
 
-        $validated = $request->validated([
-            'title' => 'required',
-            'description' => 'required',
-            'image_path' => 'string|nullable',
-            'links' => 'array|nullable',
-        ]);
+        $action->handle($request->safe()->all());
 
-        Auth::user()->ideas()->create($validated);
-
-        return redirect()->route('idea.show')->with('success', 'You have created a new idea.');
+        return to_route('ideas')->with('success', 'You have created a new idea.');
     }
 
     /**
@@ -92,22 +87,15 @@ class IdeaController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateIdeaRequest $request, Idea $idea)
+    public function update(IdeaRequest $request, UpdateIdea $action, Idea $idea)
     {
         if (! Auth::user()) {
             return redirect()->route('login')->with('error', 'You must be logged in to update the idea.');
         }
 
-        $validated = $request->validated([
-            'title' => 'required',
-            'description' => 'required',
-            'image_path' => 'string|nullable',
-            'links' => 'array|nullable',
-        ]);
+        $action->handle($request->safe()->all(), $idea);
 
-        Auth::user()->idea->update($validated);
-
-        return redirect()->route('idea.show')->with('success', 'You have updated the idea.');
+        return back()->with('success', 'You have updated the idea.');
     }
 
     /**

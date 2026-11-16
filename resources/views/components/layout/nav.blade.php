@@ -5,21 +5,22 @@
                 <img src="{{ asset('images/logo.svg') }}" alt="logo" width="100"/>
             </a>
         </div>
-        <a href="/ideas" class="underline">Ideas</a>
-        <div class="flex gap-x-5 items-center">
-            @guest
-                <a href="/register" class="">Register</a>
-                <a href="/login" class="btn">Sign In</a>
-            @endguest
 
-            @auth
+        <div class="flex gap-x-5 items-center">
+                @auth
+                    <a href="/profile/edit">Profile</a>
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
                     @method('DELETE')
 
-                    <button type="submit" class="btn">Logout</button>
+                    <button type="submit" class="btn">Log Out</button>
                 </form>
             @endauth
+
+            @guest
+                <a href="/login" >Sign In</a>
+                <a href="/register" class="btn">Register</a>
+            @endguest
         </div>
     </div>
 </nav>

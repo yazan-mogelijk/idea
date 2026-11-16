@@ -8,7 +8,7 @@ it('returns a successful response', function () {
         ->fill('email', 'john@example.com')
         ->fill('password', 'topsecret')
         ->click('Create Account')
-        ->assertPathIs('/');
+        ->assertPathIs('/ideas');
 
     $this->assertAuthenticated();
 
